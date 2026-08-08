@@ -1,0 +1,25 @@
+import math
+
+# Ciphertext
+cipher = input("Enter ciphertext: ").upper()
+
+# B = 1, U = 20
+# Assume E = 4 and T = 19
+
+for a in range(26):
+    if math.gcd(a, 26) == 1:
+        for b in range(26):
+            # B -> E
+            if (a * 4 + b) % 26 == 1 and (a * 19 + b) % 26 == 20:
+                print("Possible key: a =", a, "b =", b)
+
+                result = ""
+                for ch in cipher:
+                    if ch.isalpha():
+                        p = ((pow(a, -1, 26) *
+                              (ord(ch) - ord('A') - b)) % 26)
+                        result += chr(p + ord('A'))
+                    else:
+                        result += ch
+
+                print("Plaintext:", result)
