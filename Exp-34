@@ -1,0 +1,72 @@
+
+
+#include <stdio.h>
+#include <string.h>
+
+#define BLOCK 8
+
+void pad(char *p)
+{
+    int n = strlen(p);
+    p[n++] = '1';
+
+    while (n % BLOCK != 0)
+        p[n++] = '0';
+
+    p[n] = '\0';
+}
+
+void ECB(char *p)
+{
+    printf("ECB: ");
+    for (int i = 0; p[i]; i++)
+        printf("%c", p[i] ^ 1);
+    printf("\n");
+}
+
+void CBC(char *p)
+{
+    int prev = 0;
+
+    printf("CBC: ");
+    for (int i = 0; p[i]; i++) {
+        int c = (p[i] ^ prev) ^ 1;
+        printf("%c", c);
+        prev = c;
+    }
+    printf("\n");
+}
+
+void CFB(char *p)
+{
+    int feedback = 1;
+
+    printf("CFB: ");
+    for (int i = 0; p[i]; i++) {
+        int c = p[i] ^ feedback;
+        printf("%c", c);
+        feedback = c;
+    }
+    printf("\n");
+}
+
+int main()
+{
+    char p[100];
+
+    printf("Enter plaintext: ");
+    scanf("%s", p);
+
+    pad(p);
+
+    printf("Padded: %s\n", p);
+
+    ECB(p);
+    CBC(p);
+    CFB(p);
+
+    printf("\nPadding is added even for complete blocks\n");
+    printf("to make removal of padding unambiguous.\n");
+
+    return 0;
+}
