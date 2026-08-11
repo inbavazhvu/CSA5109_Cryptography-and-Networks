@@ -1,0 +1,50 @@
+/* 28. Diffie-Hellman and comparison with xa */
+
+#include <stdio.h>
+
+long long power(long long a, long long b, long long q)
+{
+    long long r = 1;
+    while (b--)
+        r = (r * a) % q;
+    return r;
+}
+
+int main()
+{
+    long long a, q, x, y;
+    long long A, B, KA, KB;
+
+    printf("Enter public a and q: ");
+    scanf("%lld %lld", &a, &q);
+
+    printf("Enter Alice secret x: ");
+    scanf("%lld", &x);
+
+    printf("Enter Bob secret y: ");
+    scanf("%lld", &y);
+
+    /* Normal Diffie-Hellman */
+    A = power(a, x, q);
+    B = power(a, y, q);
+
+    KA = power(B, x, q);
+    KB = power(A, y, q);
+
+    printf("\nAlice sends A = %lld\n", A);
+    printf("Bob sends B = %lld\n", B);
+    printf("Alice key = %lld\n", KA);
+    printf("Bob key   = %lld\n", KB);
+
+    /* If they send x*a and y*a instead */
+    A = (x * a) % q;
+    B = (y * a) % q;
+
+    printf("\nUsing xa instead of a^x:\n");
+    printf("Alice sends = %lld\n", A);
+    printf("Bob sends   = %lld\n", B);
+    printf("This does NOT provide the standard Diffie-Hellman security.\n");
+    printf("Eve can recover x and y when a is invertible modulo q.\n");
+
+    return 0;
+}
