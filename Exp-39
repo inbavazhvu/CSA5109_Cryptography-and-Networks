@@ -1,0 +1,62 @@
+
+
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+
+int freq[26] =
+{82,15,28,43,127,22,20,61,70,15,8,40,24,
+ 67,75,19,1,60,63,91,28,10,24,2,20,1};
+
+int main()
+{
+    char c[500], p[500];
+    int score[26], i, k, n;
+
+    printf("Enter ciphertext: ");
+    fgets(c, sizeof(c), stdin);
+
+    printf("Number of plaintexts: ");
+    scanf("%d", &n);
+
+    for (k = 0; k < 26; k++) {
+        score[k] = 0;
+
+        for (i = 0; c[i]; i++) {
+            if (isalpha(c[i])) {
+                int x = toupper(c[i]) - 'A';
+                int y = (x - k + 26) % 26;
+                p[i] = y + 'A';
+                score[k] += freq[y];
+            } else
+                p[i] = c[i];
+        }
+        p[i] = '\0';
+    }
+
+    printf("\nTop possible plaintexts:\n");
+
+    for (i = 0; i < n && i < 26; i++) {
+        int best = -1, j;
+
+        for (j = 0; j < 26; j++)
+            if (score[j] >= 0 &&
+                (best == -1 || score[j] > score[best]))
+                best = j;
+
+        printf("%d. Key=%d : ", i+1, best);
+
+        for (j = 0; c[j]; j++) {
+            if (isalpha(c[j]))
+                p[j] =
+                (toupper(c[j])-'A'-best+26)%26+'A';
+            else
+                p[j] = c[j];
+        }
+
+        printf("%s\n", p);
+        score[best] = -1;
+    }
+
+    return 0;
+}
