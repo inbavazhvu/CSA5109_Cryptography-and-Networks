@@ -1,0 +1,25 @@
+
+
+#include <stdio.h>
+
+int main()
+{
+    int rate = 1024;
+    int capacity = 1600 - rate;
+    int lanes = capacity / 64;
+    int nonzero_rate_lanes = rate / 64;
+
+    printf("State size       : 1600 bits\n");
+    printf("Block size       : %d bits\n", rate);
+    printf("Capacity         : %d bits\n", capacity);
+    printf("Capacity lanes   : %d\n", lanes);
+    printf("Rate lanes       : %d\n", nonzero_rate_lanes);
+
+    printf("\nInitial capacity lanes are all zero.\n");
+    printf("Permutation is ignored as specified.\n");
+    printf("Original zero lanes remain zero.\n");
+    printf("Therefore all capacity lanes can NEVER become nonzero.\n");
+    printf("Time required    : Never / Infinite\n");
+
+    return 0;
+}
