@@ -1,0 +1,30 @@
+
+
+#include <stdio.h>
+#include <time.h>
+
+int main()
+{
+    int k1, k2;
+
+    srand(time(NULL));
+
+    k1 = rand() % 1000 + 1;
+    k2 = rand() % 1000 + 1;
+
+    printf("DSA:\n");
+    printf("Signature 1 uses k = %d\n", k1);
+    printf("Signature 2 uses k = %d\n", k2);
+
+    if(k1 != k2)
+        printf("DSA signatures can differ for the same message.\n");
+
+    printf("\nRSA:\n");
+    printf("Same message + same private key -> deterministic signature.\n");
+
+    printf("\nImplication:\n");
+    printf("DSA requires a fresh, unpredictable k for every signature.\n");
+    printf("Reusing k can reveal the private key.\n");
+
+    return 0;
+}
