@@ -1,0 +1,53 @@
+```c
+#include <stdio.h>
+#include <stdint.h>
+
+/* Simple 3DES-CBC demonstration */
+uint64_t DES(uint64_t data, uint64_t key)
+{
+    /* DES operation placeholder */
+    return data ^ key;
+}
+
+uint64_t TripleDES(uint64_t data, uint64_t k1,
+                   uint64_t k2, uint64_t k3)
+{
+    data = DES(data, k1);
+    data = DES(data, k2);
+    data = DES(data, k3);
+    return data;
+}
+
+int main()
+{
+    uint64_t P[2] = {
+        0x123456789ABCDEF0ULL,
+        0x1111111111111111ULL
+    };
+
+    uint64_t C[2];
+    uint64_t IV = 0xAABBCCDDEEFF0011ULL;
+
+    uint64_t K1 = 0x0123456789ABCDEFULL;
+    uint64_t K2 = 0x23456789ABCDEF01ULL;
+    uint64_t K3 = 0x456789ABCDEF0123ULL;
+
+    int i;
+
+    /* CBC Encryption */
+    for(i = 0; i < 2; i++)
+    {
+        P[i] = P[i] ^ IV;
+        C[i] = TripleDES(P[i], K1, K2, K3);
+        IV = C[i];
+
+        printf("C%d = %016llX\n",
+               i+1, (unsigned long long)C[i]);
+    }
+
+    return 0;
+}
+    |
+| **Performance** | **DES**  | Requires fewer computations |
+
+**Note:** In a real modern application, I would choose **AES-GCM or another modern authenticated-encryption scheme**, rather than DES/3DES. The code above is a simplified CBC demonstration for coursework, not a production cryptographic implementation.
