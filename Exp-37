@@ -1,0 +1,52 @@
+
+
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+
+char eng[] = "ETAOINSHRDLCUMWFGYPBVKJXQZ";
+
+int main()
+{
+    char c[500], p[500], map[26] = {0};
+    int f[26] = {0}, i, j, k, n;
+
+    printf("Enter ciphertext: ");
+    fgets(c, sizeof(c), stdin);
+
+    printf("Number of plaintexts: ");
+    scanf("%d", &n);
+
+    for (i = 0; c[i]; i++)
+        if (isalpha(c[i]))
+            f[toupper(c[i])-'A']++;
+
+    printf("\nPossible plaintexts:\n");
+
+    for (k = 0; k < n && k < 26; k++) {
+        int max = -1, pos = -1;
+
+        for (i = 0; i < 26; i++)
+            if (f[i] > max) {
+                max = f[i];
+                pos = i;
+            }
+
+        if (max <= 0) break;
+
+        map[pos] = eng[k];
+        f[pos] = -1;
+
+        for (i = 0; c[i]; i++) {
+            if (isalpha(c[i]))
+                p[i] = map[toupper(c[i])-'A'];
+            else
+                p[i] = c[i];
+        }
+
+        p[i] = '\0';
+        printf("%d. %s\n", k+1, p);
+    }
+
+    return 0;
+}
