@@ -1,0 +1,38 @@
+
+
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+
+int main()
+{
+    char p[100];
+    int key[100], c[100], i, n;
+
+    printf("Enter plaintext: ");
+    scanf("%s", p);
+
+    n = strlen(p);
+
+    printf("Enter key stream:\n");
+    for (i = 0; i < n; i++)
+        scanf("%d", &key[i]);
+
+    printf("Ciphertext: ");
+
+    for (i = 0; i < n; i++) {
+        p[i] = toupper(p[i]);
+        c[i] = ((p[i] - 'A') + key[i]) % 26;
+        printf("%c", c[i] + 'A');
+    }
+
+    printf("\n");
+
+    printf("Decrypted: ");
+    for (i = 0; i < n; i++)
+        printf("%c", ((c[i] - key[i] + 26) % 26) + 'A');
+
+    printf("\n");
+
+    return 0;
+}
