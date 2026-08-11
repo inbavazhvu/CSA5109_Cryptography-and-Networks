@@ -1,0 +1,50 @@
+
+
+#include <stdio.h>
+#include <stdint.h>
+
+uint64_t shift64(uint64_t x)
+{
+    return x << 1;
+}
+
+__uint128_t shift128(__uint128_t x)
+{
+    return x << 1;
+}
+
+int main()
+{
+    uint64_t L64 = 0;
+    uint64_t K1_64, K2_64;
+
+    __uint128_t L128 = 0;
+    __uint128_t K1_128, K2_128;
+
+    /* Rb constants:
+       64-bit  = 0x1B
+       128-bit = 0x87
+    */
+
+    K1_64 = shift64(L64);
+    K1_64 ^= 0x1B;
+
+    K2_64 = shift64(K1_64);
+    K2_64 ^= 0x1B;
+
+    K1_128 = shift128(L128);
+    K1_128 ^= 0x87;
+
+    K2_128 = shift128(K1_128);
+    K2_128 ^= 0x87;
+
+    printf("64-bit Rb  = 0x1B\n");
+    printf("128-bit Rb = 0x87\n");
+
+    printf("\nCMAC uses:\n");
+    printf("K1 = 2*L\n");
+    printf("K2 = 2*K1\n");
+    printf("If MSB is 1, XOR Rb.\n");
+
+    return 0;
+}
