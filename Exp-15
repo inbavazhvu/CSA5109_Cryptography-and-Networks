@@ -1,0 +1,81 @@
+```c
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+
+int main() {
+    char c[500];
+    int score[26], key, i, j, top = 10;
+    char p[500];
+
+    printf("Enter ciphertext: ");
+    fgets(c, sizeof(c), stdin);
+
+    /* English letter frequency */
+    int freq[26] = {
+        82,15,28,43,127,22,20,61,70,15,8,40,24,
+        67,75,19,1,60,63,91,28,10,24,2,20,1
+    };
+
+    /* Try all 26 possible keys */
+    for(key = 0; key < 26; key++) {
+        score[key] = 0;
+
+        for(i = 0; c[i] != '\0'; i++) {
+            if(isalpha(c[i])) {
+                int x = toupper(c[i]) - 'A';
+                int y = (x - key + 26) % 26;
+                p[i] = y + 'A';
+                score[key] += freq[y];
+            } else
+                p[i] = c[i];
+        }
+        p[i] = '\0';
+    }
+
+    /* Display top 10 keys */
+    printf("\nTop 10 possible plaintexts:\n");
+
+    for(i = 0; i < top; i++) {
+        int best = -1;
+
+        for(j = 0; j < 26; j++)
+            if(score[j] >= 0 &&
+               (best == -1 || score[j] > score[best]))
+                best = j;
+
+        printf("\nKey = %d, Score = %d\n", best, score[best]);
+
+        for(j = 0; c[j] != '\0'; j++) {
+            if(isalpha(c[j])) {
+                int x = toupper(c[j]) - 'A';
+                p[j] = (x - best + 26) % 26 + 'A';
+            } else
+                p[j] = c[j];
+        }
+        p[j] = '\0';
+
+        printf("Plaintext: %s\n", p);
+
+        score[best] = -1;
+    }
+
+    return 0;
+}
+```
+
+### How it works
+
+1. Tries all **26 possible additive-cipher keys**.
+2. Decrypts the ciphertext using each key.
+3. Uses standard **English letter-frequency values** to calculate a score.
+4. Sorts the results by score.
+5. Displays the **top 10 possible plaintexts** automatically.
+
+For an additive cipher:
+
+[
+P=(C-K)\mod26
+]
+
+So the program requires **no manual key selection**.
