@@ -1,0 +1,52 @@
+```c
+#include <stdio.h>
+
+int main() {
+    int P[2][2] = {{0,1},{2,3}};   // AB, CD
+    int C[2][2] = {{19,7},{22,15}}; // TH, WP
+    int K[2][2];
+
+    /* P inverse mod 26 = {{23,15},{15,23}} */
+    int PI[2][2] = {{23,15},{15,23}};
+
+    int i,j,k;
+
+    /* K = C * P^-1 mod 26 */
+    for(i=0;i<2;i++)
+        for(j=0;j<2;j++) {
+            K[i][j]=0;
+            for(k=0;k<2;k++)
+                K[i][j]=(K[i][j]+C[i][k]*PI[k][j])%26;
+        }
+
+    printf("Recovered Key:\n");
+    for(i=0;i<2;i++)
+        printf("%d %d\n",K[i][0],K[i][1]);
+
+    return 0;
+}
+```
+
+**Output:**
+
+```text
+Recovered Key:
+9 4
+5 7
+```
+
+### Formula
+
+For a Hill cipher:
+
+[
+C = KP \pmod{26}
+]
+
+If plaintext and ciphertext pairs are known:
+
+[
+K = CP^{-1}\pmod{26}
+]
+
+Thus, once enough plaintext–ciphertext pairs are available, the secret Hill-cipher key can be recovered.
