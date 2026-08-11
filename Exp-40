@@ -1,0 +1,48 @@
+
+
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+
+char order[] = "ETAOINSHRDLCUMWFGYPBVKJXQZ";
+
+int main()
+{
+    char c[500], p[500], map[26] = {0};
+    int f[26] = {0}, i, j, n;
+
+    printf("Enter ciphertext: ");
+    fgets(c, sizeof(c), stdin);
+
+    printf("Give me top: ");
+    scanf("%d", &n);
+
+    for (i = 0; c[i]; i++)
+        if (isalpha(c[i]))
+            f[toupper(c[i])-'A']++;
+
+    for (j = 0; j < n && j < 26; j++) {
+        int max = -1, pos = -1;
+
+        for (i = 0; i < 26; i++)
+            if (f[i] > max) {
+                max = f[i];
+                pos = i;
+            }
+
+        if (max <= 0) break;
+
+        map[pos] = order[j];
+        f[pos] = -1;
+
+        for (i = 0; c[i]; i++)
+            p[i] = isalpha(c[i])
+                 ? map[toupper(c[i])-'A'] : c[i];
+
+        p[i] = '\0';
+
+        printf("%d. %s\n", j+1, p);
+    }
+
+    return 0;
+}
