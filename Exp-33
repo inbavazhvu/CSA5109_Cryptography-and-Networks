@@ -1,0 +1,49 @@
+
+
+#include <stdio.h>
+#include <stdint.h>
+
+uint64_t des_encrypt(uint64_t data, uint64_t key)
+{
+    /* DES has 16 Feistel rounds.
+       This is a compact educational implementation. */
+    for (int i = 0; i < 16; i++) {
+        uint32_t L = data >> 32;
+        uint32_t R = data & 0xFFFFFFFF;
+
+        R ^= (uint32_t)(key >> (i % 32));
+        data = ((uint64_t)R << 32) | L;
+    }
+    return data;
+}
+
+uint64_t des_decrypt(uint64_t data, uint64_t key)
+{
+    for (int i = 15; i >= 0; i--) {
+        uint32_t L = data >> 32;
+        uint32_t R = data & 0xFFFFFFFF;
+
+        R ^= (uint32_t)(key >> (i % 32));
+        data = ((uint64_t)R << 32) | L;
+    }
+    return data;
+}
+
+int main()
+{
+    uint64_t plaintext, key, ciphertext, decrypted;
+
+    printf("Enter 64-bit plaintext (hex): ");
+    scanf("%llx", &plaintext);
+
+    printf("Enter 56-bit key (hex): ");
+    scanf("%llx", &key);
+
+    ciphertext = des_encrypt(plaintext, key);
+    decrypted = des_decrypt(ciphertext, key);
+
+    printf("Ciphertext : %016llX\n", ciphertext);
+    printf("Decrypted  : %016llX\n", decrypted);
+
+    return 0;
+}
