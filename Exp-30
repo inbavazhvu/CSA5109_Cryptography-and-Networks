@@ -1,0 +1,18 @@
+
+
+#include <stdio.h>
+
+int main()
+{
+    int X = 0x1234;
+    int T = 0x5678;                 /* MAC(K,X) */
+    int X2 = X ^ T;
+
+    printf("Message X              = %04X\n", X);
+    printf("CBC-MAC T              = %04X\n", T);
+    printf("Second block X XOR T   = %04X\n", X2);
+    printf("Forged message         = %04X || %04X\n", X, X2);
+    printf("CBC-MAC of forged msg  = T = %04X\n", T);
+
+    return 0;
+}
