@@ -1,0 +1,74 @@
+```c id="7j3p8a"
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+
+char freq[] = "ETAOINSHRDLCUMWFGYPBVKJXQZ";
+
+int main() {
+    char c[500], p[500], map[26];
+    int count[26] = {0}, i, j, k, n = 10;
+
+    printf("Enter ciphertext: ");
+    fgets(c, sizeof(c), stdin);
+
+    /* Count frequency of each letter */
+    for(i = 0; c[i]; i++)
+        if(isalpha(c[i]))
+            count[toupper(c[i])-'A']++;
+
+    /* Print possible plaintexts using frequency substitution */
+    printf("\nTop %d possible plaintexts:\n", n);
+
+    for(k = 0; k < n; k++) {
+        int max = -1, pos = -1;
+
+        /* Find most frequent unused ciphertext letter */
+        for(i = 0; i < 26; i++) {
+            if(count[i] > max) {
+                max = count[i];
+                pos = i;
+            }
+        }
+
+        if(pos == -1 || max == 0) break;
+
+        /* Map ciphertext frequency to English frequency */
+        map[pos] = freq[k];
+
+        /* Mark as used */
+        count[pos] = -1;
+
+        /* Display current possible plaintext */
+        for(i = 0; c[i]; i++) {
+            if(isalpha(c[i]))
+                p[i] = map[toupper(c[i])-'A'];
+            else
+                p[i] = c[i];
+        }
+        p[i] = '\0';
+
+        printf("%d. %s\n", k + 1, p);
+    }
+
+    return 0;
+}
+```
+
+### Principle
+
+English letters occur approximately in this order:
+
+```text
+E T A O I N S H R D L C U M W F G Y P B V K J X Q Z
+```
+
+The program:
+
+1. Counts the frequency of letters in the ciphertext.
+2. Finds the most frequent ciphertext letters.
+3. Maps them to common English letters.
+4. Produces possible plaintexts.
+5. Displays up to **10 candidates**.
+
+**Note:** A true automatic attack on a general monoalphabetic substitution cipher normally uses **word/dictionary scoring, n-gram frequencies, or hill-climbing**, because simple letter frequency alone cannot reliably recover the exact plaintext. This version is intentionally short for an exam.
