@@ -1,0 +1,72 @@
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+
+int main() {
+    char keyword[] = "CIPHER";
+    char cipher[26];
+    char alphabet[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    char plaintext[100], ciphertext[100];
+    int i, j, k = 0, found;
+
+    /* Create cipher sequence from keyword */
+    for (i = 0; keyword[i] != '\0'; i++) {
+        found = 0;
+
+        for (j = 0; j < k; j++) {
+            if (cipher[j] == keyword[i]) {
+                found = 1;
+                break;
+            }
+        }
+
+        if (!found) {
+            cipher[k++] = keyword[i];
+        }
+    }
+
+    /* Add remaining unused letters */
+    for (i = 0; i < 26; i++) {
+        found = 0;
+
+        for (j = 0; j < k; j++) {
+            if (cipher[j] == alphabet[i]) {
+                found = 1;
+                break;
+            }
+        }
+
+        if (!found) {
+            cipher[k++] = alphabet[i];
+        }
+    }
+
+    cipher[26] = '\0';
+
+    printf("Plain :  ");
+    for (i = 0; i < 26; i++)
+        printf("%c ", alphabet[i]);
+
+    printf("\nCipher:  ");
+    for (i = 0; i < 26; i++)
+        printf("%c ", cipher[i]);
+
+    /* Encryption */
+    printf("\n\nEnter plaintext: ");
+    fgets(plaintext, sizeof(plaintext), stdin);
+
+    for (i = 0; plaintext[i] != '\0'; i++) {
+        if (isalpha(plaintext[i])) {
+            char ch = toupper(plaintext[i]);
+            ciphertext[i] = cipher[ch - 'A'];
+        } else {
+            ciphertext[i] = plaintext[i];
+        }
+    }
+
+    ciphertext[i] = '\0';
+
+    printf("Ciphertext: %s", ciphertext);
+
+    return 0;
+}
