@@ -1,0 +1,37 @@
+#include <stdio.h>
+
+int gcd(int a, int b)
+{
+    while (b) {
+        int t = a % b;
+        a = b;
+        b = t;
+    }
+    return a;
+}
+
+int main()
+{
+    int p = 61, q = 53;
+    int n = p * q;
+    int phi = (p - 1) * (q - 1);
+
+    int old_e = 17, old_d = 2753;
+    int new_e = 7, new_d;
+
+    /* Generate new private key using same modulus */
+    for (new_d = 1; new_d < phi; new_d++)
+        if ((new_e * new_d) % phi == 1)
+            break;
+
+    printf("Old Public Key  : (%d, %d)\n", old_e, n);
+    printf("Leaked Private Key: (%d, %d)\n", old_d, n);
+
+    printf("\nNew Public Key  : (%d, %d)\n", new_e, n);
+    printf("New Private Key : (%d, %d)\n", new_d, n);
+
+    printf("\nAttacker can factor the same n and calculate phi(n).\n");
+    printf("Therefore, changing only e and d is NOT safe.\n");
+
+    return 0;
+}
