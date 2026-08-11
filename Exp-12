@@ -1,0 +1,40 @@
+```c
+#include <stdio.h>
+#include <string.h>
+
+int main() {
+    int K[2][2]={{9,4},{5,7}};
+    int KI[2][2]={{5,12},{15,25}}; // Inverse of K mod 26
+    char p[]="MEETMEATTHEUSUALPLACEATTENRATHERTHANEIGHTOCLOCKX";
+    char c[100], d[100];
+    int i, a, b;
+
+    // Encryption
+    for(i=0; i<strlen(p); i+=2) {
+        a=p[i]-'A'; b=p[i+1]-'A';
+        c[i]=(K[0][0]*a+K[0][1]*b)%26+'A';
+        c[i+1]=(K[1][0]*a+K[1][1]*b)%26+'A';
+    }
+    c[i]='\0';
+
+    // Decryption
+    for(i=0; i<strlen(c); i+=2) {
+        a=c[i]-'A'; b=c[i+1]-'A';
+        d[i]=(KI[0][0]*a+KI[0][1]*b)%26+'A';
+        d[i+1]=(KI[1][0]*a+KI[1][1]*b)%26+'A';
+    }
+    d[i]='\0';
+
+    printf("Ciphertext: %s\n",c);
+    printf("Plaintext : %s\n",d);
+
+    return 0;
+}
+```
+
+**Output:**
+
+```text
+Ciphertext: UKIXUKYDROMEIWSZXWIOKUNUKHXHROAJROANQYEBTLKJEGAD
+Plaintext : MEETMEATTHEUSUALPLACEATTENRATHERTHANEIGHTOCLOCKX
+```
