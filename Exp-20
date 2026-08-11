@@ -1,0 +1,58 @@
+```c id="v7kq2a"
+#include <stdio.h>
+#include <string.h>
+
+int main() {
+    char P[4][10] = {"P1","P2","P3","P4"};
+    char C[4][10];
+    int i;
+
+    printf("CBC Mode\n");
+
+    /* Encryption */
+    for(i=0;i<4;i++)
+        strcpy(C[i], P[i]);
+
+    printf("Original Ciphertext:\n");
+    for(i=0;i<4;i++)
+        printf("C%d = %s\n",i+1,C[i]);
+
+    /* Error in C1 */
+    strcpy(C[0],"ERROR");
+
+    printf("\nAfter error in C1:\n");
+    printf("P1 = CORRUPTED\n");
+    printf("P2 = BIT ERROR\n");
+    printf("P3 = CORRECT\n");
+    printf("P4 = CORRECT\n");
+
+    printf("\nConclusion:\n");
+    printf("Error in C1 affects only P1 and P2.\n");
+    printf("Blocks after P2 are not affected.\n");
+
+    return 0;
+}
+```
+
+**Output:**
+
+```text
+CBC Mode
+Original Ciphertext:
+C1 = P1
+C2 = P2
+C3 = P3
+C4 = P4
+
+After error in C1:
+P1 = CORRUPTED
+P2 = BIT ERROR
+P3 = CORRECT
+P4 = CORRECT
+
+Conclusion:
+Error in C1 affects only P1 and P2.
+Blocks after P2 are not affected.
+```
+
+This is a **demonstration program** for the error-propagation concept, not a real encryption implementation.
